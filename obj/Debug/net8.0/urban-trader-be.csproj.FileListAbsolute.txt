@@ -31,3 +31,4 @@ C:\Users\ADMIN\Desktop\The Urban Trader\urban-trader-be\obj\Debug\net8.0\refint\
 C:\Users\ADMIN\Desktop\The Urban Trader\urban-trader-be\obj\Debug\net8.0\urban-trader-be.pdb
 C:\Users\ADMIN\Desktop\The Urban Trader\urban-trader-be\obj\Debug\net8.0\urban-trader-be.genruntimeconfig.cache
 C:\Users\ADMIN\Desktop\The Urban Trader\urban-trader-be\obj\Debug\net8.0\ref\urban-trader-be.dll
+C:\Users\ADMIN\Desktop\The Urban Trader\urban-trader-be\obj\Debug\net8.0\urban-trader-be.sourcelink.json
