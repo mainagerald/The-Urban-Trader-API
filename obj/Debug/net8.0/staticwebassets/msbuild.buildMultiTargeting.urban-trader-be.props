@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\urban-trader-be.props" />
+</Project>
