@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using urban_trader_be.Data;
+using urban_trader_be.Mappers;
 
 namespace urban_trader_be.Controller
 {
@@ -19,7 +20,7 @@ namespace urban_trader_be.Controller
 
         [HttpGet]
         public IActionResult GetAll(){
-            var stocks = _context.Stock.ToList();
+            var stocks = _context.Stock.ToList().Select(s=>s.ToStockDto());
 
             return Ok(stocks);
         }
@@ -32,7 +33,7 @@ namespace urban_trader_be.Controller
                 return NotFound();
             }
 
-            return Ok(stock);
+            return Ok(stock.ToStockDto());
         }
     }
 }
