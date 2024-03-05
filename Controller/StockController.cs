@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using urban_trader_be.Data;
+using urban_trader_be.DTO.Stock;
 using urban_trader_be.Mappers;
 
 namespace urban_trader_be.Controller
@@ -34,6 +35,15 @@ namespace urban_trader_be.Controller
             }
 
             return Ok(stock.ToStockDto());
+        }
+
+        [HttpPost]
+
+        public IActionResult Create([FromBody] CreateStockRequestDto stockDto){
+            var stockModel=stockDto.ToStockFromCreateDTO();
+            _context.Stock.Add(stockModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new{id=stockModel.Id}, stockModel.ToStockDto());
         }
     }
 }
