@@ -45,5 +45,24 @@ namespace urban_trader_be.Controller
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new{id=stockModel.Id}, stockModel.ToStockDto());
         }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto){
+            var stockModel=_context.Stock.FirstOrDefault(x=>x.Id==id);
+            if(stockModel==null){
+                return NotFound();
+            }
+            stockModel.Symbol=updateStockRequestDto.Symbol;
+            stockModel.CompanyName=updateStockRequestDto.CompanyName;
+            stockModel.Purchase=updateStockRequestDto.Purchase;
+            stockModel.LastDividend=updateStockRequestDto.LastDividend;
+            stockModel.Industry=updateStockRequestDto.Industry;
+            stockModel.MarketCap=updateStockRequestDto.MarketCap;
+
+            _context.SaveChanges();
+
+            return Ok(stockModel.ToStockDto());
+        }
     }
 }

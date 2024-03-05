@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace urban_trader_be.DTO.Stock
 {
-    public class CreateStockRequestDto
+    public class UpdateStockRequestDto
     {
         public string Symbol{get; set;} = string.Empty;
         public string CompanyName{get; set;} = string.Empty;
