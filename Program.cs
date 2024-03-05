@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using urban_trader_be.Data;
+using urban_trader_be.Interface;
+using urban_trader_be.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDatabaseContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<iStockRepository, StockRepository >();
 
 var app = builder.Build();
 

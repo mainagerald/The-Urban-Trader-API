@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("urban-trader-be")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+17077cf1b2b04f9ee46c1fc08c21ade63228a80f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb1b7d23cf3c86413b0833c9224e71f135b3c4c5")]
 [assembly: System.Reflection.AssemblyProductAttribute("urban-trader-be")]
 [assembly: System.Reflection.AssemblyTitleAttribute("urban-trader-be")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
