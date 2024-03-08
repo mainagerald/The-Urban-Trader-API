@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using urban_trader_be.Data;
 using urban_trader_be.DTO.Stock;
+using urban_trader_be.Helpers;
 using urban_trader_be.Interface;
 using urban_trader_be.Mappers;
 
@@ -24,17 +25,24 @@ namespace urban_trader_be.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject queryObject)
         {
-            var stocks = await _stockRepo.GetAllAsync();
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+            var stocks = await _stockRepo.GetAllAsync(queryObject);
             var stockDto = stocks.Select(s=>s.ToStockDto());
 
             return Ok(stocks);
         }
 
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var stock = await _stockRepo.GetByIdAsync(id);
 
             if (stock==null){
@@ -44,19 +52,26 @@ namespace urban_trader_be.Controller
             return Ok(stock.ToStockDto());
         }
 
-        [HttpPost]
 
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var stockModel= stockDto.ToStockFromCreateDTO();
             await _stockRepo.CreateAsync(stockModel);
             return CreatedAtAction(nameof(GetById), new{id=stockModel.Id}, stockModel.ToStockDto());
         }
 
+
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto)
         {
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var stockModel= await _stockRepo.UpdateAsync(id, updateStockRequestDto);
 
             if(stockModel==null){
@@ -65,11 +80,15 @@ namespace urban_trader_be.Controller
 
             return Ok(stockModel.ToStockDto());
         }
+        
 
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var stockModel = await _stockRepo.DeleteAsync(id);
 
           if(stockModel==null){

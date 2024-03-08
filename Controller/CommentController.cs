@@ -25,14 +25,20 @@ namespace urban_trader_be.Controller
 
         [HttpGet]
         public async Task<IActionResult> GetAll(){
-            var comment = await _commentRepository.GetAllAsync();
-            var CommentDto=comment.Select(s=>s.ToCommentDto());
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+            var comments = await _commentRepository.GetAllAsync();
+            var CommentDto=comments.Select(s=>s.ToCommentDto());
             return Ok(CommentDto);
         }
 
         [HttpGet]
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var comment=await _commentRepository.GetByIdAsync(id);
             if(comment==null){
                 return NotFound();
@@ -44,18 +50,24 @@ namespace urban_trader_be.Controller
         [HttpPost("{StockId:int}")]
         public async Task<IActionResult> Create([FromRoute] int StockId, CreateCommentDto createCommentDto)
         {
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             if(!await _stockRepository.StockExists(StockId)){
                 return BadRequest("Stock does not exist!");
             }
             var commentModel=createCommentDto.ToCommentFromCreate(StockId);
             await _commentRepository.CreateAsync(commentModel);
             
-            return CreatedAtAction(nameof(GetById), new {id=commentModel}, commentModel.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new {id=commentModel.Id}, commentModel.ToCommentDto());
         }
 
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentDto updateCommentDto){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var commentModel=await _commentRepository.UpdateAsync(id, updateCommentDto);
             if(commentModel==null){
                 return NotFound();
@@ -66,6 +78,9 @@ namespace urban_trader_be.Controller
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var commentModel=await _commentRepository.DeleteAsync(id);
             if(commentModel==null){
                 return NotFound("Comment does not exist");

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using urban_trader_be.Data;
 using urban_trader_be.DTO.Stock;
+using urban_trader_be.Helpers;
 using urban_trader_be.Interface;
 using urban_trader_be.Model;
 
@@ -36,10 +37,19 @@ namespace urban_trader_be.Repository
             return stockModel;
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
         {
-            return await _context.Stock.Include(c=>c.Comments).ToListAsync();
+            var stocks =  _context.Stock.Include(c=>c.Comments).AsQueryable();
+            if(!string.IsNullOrWhiteSpace(queryObject.CompanyName)){
+                stocks=stocks.Where(s=>s.CompanyName.Contains(queryObject.CompanyName));
+            }
+            if(!string.IsNullOrWhiteSpace(queryObject.Symbol)){
+                stocks=stocks.Where(s=>s.Symbol.Contains(queryObject.Symbol));
+            }
+
+            return await stocks.ToListAsync();
         }
+
 
         public async Task<Stock?> GetByIdAsync(int id)
         {
