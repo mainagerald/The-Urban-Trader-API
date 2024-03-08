@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using urban_trader_be.DTO.Comment;
 
 namespace urban_trader_be.DTO.Stock
 {
@@ -14,5 +15,6 @@ namespace urban_trader_be.DTO.Stock
         public decimal LastDividend {get; set;}
         public string Industry{get; set;}= string.Empty;
         public long MarketCap{get; set;}
+        public List<CommentDto> Comments{get; set;}
     }
 }

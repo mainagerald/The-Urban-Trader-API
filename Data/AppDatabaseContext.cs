@@ -15,6 +15,6 @@ namespace urban_trader_be.Data
             
         }
         public DbSet<Stock> Stock{get; set;} //grabbing something from db
-        public DbSet<Comment> Comments{get; set;}
+        public DbSet<Comment> Comment{get; set;}
     }
 }

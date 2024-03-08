@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using urban_trader_be.Data;
 using urban_trader_be.Interface;
 using urban_trader_be.Repository;
@@ -11,10 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>{ options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; } ); //prevent object cycles
+
 builder.Services.AddDbContext<AppDatabaseContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<iStockRepository, StockRepository >();
+builder.Services.AddScoped<iCommentRepository, CommentRepository >();
 
 var app = builder.Build();
 

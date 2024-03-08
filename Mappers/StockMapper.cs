@@ -17,7 +17,8 @@ namespace urban_trader_be.Mappers
                 CompanyName = stockModel.CompanyName,
                 Purchase = stockModel.LastDividend,
                 Industry = stockModel.Industry,
-                MarketCap = stockModel.MarketCap
+                MarketCap = stockModel.MarketCap,
+                Comments=stockModel.Comments.Select(c=>c.ToCommentDto()).ToList()
             };
         }
 
