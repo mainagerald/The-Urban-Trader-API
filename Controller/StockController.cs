@@ -20,7 +20,7 @@ namespace urban_trader_be.Controller
         public StockController(AppDatabaseContext context, iStockRepository stockRepo)
         {
             _stockRepo=stockRepo;
-            _context=context;
+            _context=context; 
         }
 
         [HttpGet]
@@ -32,7 +32,7 @@ namespace urban_trader_be.Controller
             return Ok(stocks);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var stock = await _stockRepo.GetByIdAsync(id);
@@ -54,7 +54,7 @@ namespace urban_trader_be.Controller
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto)
         {
             var stockModel= await _stockRepo.UpdateAsync(id, updateStockRequestDto);
@@ -67,7 +67,7 @@ namespace urban_trader_be.Controller
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var stockModel = await _stockRepo.DeleteAsync(id);

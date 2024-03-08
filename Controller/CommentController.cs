@@ -31,7 +31,7 @@ namespace urban_trader_be.Controller
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id){
             var comment=await _commentRepository.GetByIdAsync(id);
             if(comment==null){
@@ -41,7 +41,7 @@ namespace urban_trader_be.Controller
             return Ok(comment.ToCommentDto());
         }
 
-        [HttpPost("{StockId}")]
+        [HttpPost("{StockId:int}")]
         public async Task<IActionResult> Create([FromRoute] int StockId, CreateCommentDto createCommentDto)
         {
             if(!await _stockRepository.StockExists(StockId)){
@@ -54,7 +54,7 @@ namespace urban_trader_be.Controller
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentDto updateCommentDto){
             var commentModel=await _commentRepository.UpdateAsync(id, updateCommentDto);
             if(commentModel==null){
@@ -64,7 +64,7 @@ namespace urban_trader_be.Controller
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id){
             var commentModel=await _commentRepository.DeleteAsync(id);
             if(commentModel==null){
