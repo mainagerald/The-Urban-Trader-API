@@ -70,7 +70,7 @@ namespace urban_trader_be.Controller
             }
             var commentModel=await _commentRepository.UpdateAsync(id, updateCommentDto);
             if(commentModel==null){
-                return NotFound();
+                return NotFound("Comment does nt exist");
             }
             return Ok(commentModel.ToCommentDto());
         }

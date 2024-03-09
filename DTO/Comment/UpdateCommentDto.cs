@@ -16,5 +16,6 @@ namespace urban_trader_be.DTO.Comment
         [MinLength(5, ErrorMessage ="Content must be atleast 5 characters.")]
         [MaxLength(280, ErrorMessage ="Content cannot be over 280 characters.")]
         public string Content{get; set;} = string.Empty;
+        
     }
 }
