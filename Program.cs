@@ -7,6 +7,7 @@ using urban_trader_be.Data;
 using urban_trader_be.Interface;
 using urban_trader_be.Model;
 using urban_trader_be.Repository;
+using urban_trader_be.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,8 +50,10 @@ builder.Services.AddAuthentication(options=>{
     };
 });
 
+//dependency injections
 builder.Services.AddScoped<iStockRepository, StockRepository >();
 builder.Services.AddScoped<iCommentRepository, CommentRepository >();
+builder.Services.AddScoped<iTokenService, TokenService>();
 
 var app = builder.Build();
 

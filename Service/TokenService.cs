@@ -19,7 +19,7 @@ namespace urban_trader_be.Service
         public TokenService(IConfiguration iconfig)
         {
             _iconfig=iconfig;
-            _key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_iconfig["JWT:SigningKey"]));
+            _key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_iconfig["JWT:SigningKey"])); //encrypts the token uniquely
         }
         public string CreateToken(AppUser appUser)
         {
@@ -31,7 +31,7 @@ namespace urban_trader_be.Service
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
-            var token = new SecurityTokenDescriptor
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject=new ClaimsIdentity(claims),
                 Expires=DateTime.Now.AddDays(7),
@@ -39,6 +39,12 @@ namespace urban_trader_be.Service
                 Issuer=_iconfig["JWT:Issuer"],
                 Audience=_iconfig["JWT:Audience"]
             };
+
+            var tokenHandler=new JwtSecurityTokenHandler(); //token created here!
+
+            var token=tokenHandler.CreateToken(tokenDescriptor); //pass the parameters
+
+            return tokenHandler.WriteToken(token); // returns as string
         }
     }
 }

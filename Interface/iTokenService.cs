@@ -8,6 +8,6 @@ namespace urban_trader_be.Interface
 {
     public interface iTokenService
     {
-        string CreateToken(AppUser appUser);
+        string CreateToken(AppUser user);
     }
 }

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using urban_trader_be.DTO.Account;
+using urban_trader_be.Interface;
 using urban_trader_be.Model;
+using urban_trader_be.Service;
 
 namespace urban_trader_be.Controller
 {
@@ -14,9 +16,11 @@ namespace urban_trader_be.Controller
     public class AccountController:ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        public AccountController(UserManager<AppUser> userManager)
+        private readonly iTokenService _tokenService;
+        public AccountController(UserManager<AppUser> userManager, iTokenService tokenService)
         {
             _userManager=userManager;
+            _tokenService=tokenService;
         }
         
         [HttpPost("register")]
@@ -37,7 +41,13 @@ namespace urban_trader_be.Controller
                 if(createdUser.Succeeded){
                     var roleResult= await _userManager.AddToRoleAsync(appUser, "User");
                     if(roleResult.Succeeded){
-                        return Ok("User created");
+                        return Ok(
+                            new NewUserDto{
+                                Username=appUser.UserName,
+                                Email=appUser.Email,
+                                Token=_tokenService.CreateToken(appUser)
+                            }
+                        );
                     }else{
                         return StatusCode(500, roleResult.Errors);
                     }
