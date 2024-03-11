@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using urban_trader_be.Data;
 
@@ -11,9 +12,11 @@ using urban_trader_be.Data;
 namespace urban_trader_be.Migrations
 {
     [DbContext(typeof(AppDatabaseContext))]
-    partial class AppDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240311143500_CommentOneToOne")]
+    partial class CommentOneToOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace urban_trader_be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "54b6c43d-5189-457e-a4e8-84e85cf0c628",
+                            Id = "f496c7d3-0670-4bc0-87f6-c6c3658cc9bc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "95ed8c2f-bb24-43f7-bac0-19a7b5318841",
+                            Id = "0e2b80d7-3ce7-4a29-9989-fdbe3c699bd7",
                             Name = "User",
                             NormalizedName = "USER"
                         });
