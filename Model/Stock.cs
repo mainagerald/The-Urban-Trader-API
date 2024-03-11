@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace urban_trader_be.Model
 {
+    [Table("Stocks")]
 
     public class Stock
     {
@@ -23,5 +24,6 @@ namespace urban_trader_be.Model
         public long MarketCap{get; set;}
 
         public List<Comment> Comments{get; set;} = new List<Comment>();
+        public List<Portfolio> Portfolios{get; set;}=new List<Portfolio>();
     }
 }
