@@ -39,7 +39,8 @@ namespace urban_trader_be.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
         {
-            var stocks =  _context.Stocks.Include(c=>c.Comments).AsQueryable();
+            var stocks =  _context.Stocks.Include(c=>c.Comments).ThenInclude(a=>a.AppUser).AsQueryable();
+
             if(!string.IsNullOrWhiteSpace(queryObject.CompanyName)){
                 stocks=stocks.Where(s=>s.CompanyName.Contains(queryObject.CompanyName));
             }

@@ -15,6 +15,7 @@ namespace urban_trader_be.Mappers
                 Title=commentModelMapper.Title,
                 Content=commentModelMapper.Content,
                 CreatedOn=commentModelMapper.CreatedOn,
+                CreatedBy=commentModelMapper.AppUser.UserName,
                 StockId=commentModelMapper.StockId
             };
         }

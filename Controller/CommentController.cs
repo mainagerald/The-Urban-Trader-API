@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using urban_trader_be.DTO.Comment;
+using urban_trader_be.Extensions;
 using urban_trader_be.Interface;
 using urban_trader_be.Mappers;
+using urban_trader_be.Model;
 using urban_trader_be.Repository;
 
 namespace urban_trader_be.Controller
@@ -16,11 +19,13 @@ namespace urban_trader_be.Controller
     {
         private readonly iCommentRepository _commentRepository;
         private readonly iStockRepository _stockRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CommentController(iCommentRepository iCommentRepo, iStockRepository iStockRepo)
+        public CommentController(iCommentRepository iCommentRepo, iStockRepository iStockRepo, UserManager<AppUser> userManager)
         {
             _commentRepository=iCommentRepo;
             _stockRepository=iStockRepo;
+            _userManager=userManager;
         }
 
         [HttpGet]
@@ -56,7 +61,13 @@ namespace urban_trader_be.Controller
             if(!await _stockRepository.StockExists(StockId)){
                 return BadRequest("Stock does not exist!");
             }
+
+            var username=User.GetUsername();
+            var appUser=await _userManager.FindByNameAsync(username);
+
             var commentModel=createCommentDto.ToCommentFromCreate(StockId);
+            commentModel.AppUserId=appUser.Id;
+            
             await _commentRepository.CreateAsync(commentModel);
             
             return CreatedAtAction(nameof(GetById), new {id=commentModel.Id}, commentModel.ToCommentDto());
