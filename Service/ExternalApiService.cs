@@ -12,18 +12,19 @@ namespace urban_trader_be.Service
 {
     public class ExternalApiService : iExternalApiService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-        private ExternalApiService(HttpClient httpClient, IConfiguration configuration)
+        private HttpClient _httpClient;
+        private IConfiguration _configuration;
+        public ExternalApiService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient=httpClient;
             _configuration=configuration;
         }
+        
         public async Task<Stock> FindStockBySymbolAsync(string symbol)
         {
             try
             {
-                var result=await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/${symbol}?apikey={_configuration["APIKey"]}");
+                var result=await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/{symbol}?apikey={_configuration["APIKey"]}");
 
                 if(result.IsSuccessStatusCode)
                 {
