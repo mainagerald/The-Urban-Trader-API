@@ -15,13 +15,14 @@ namespace urban_trader_be.Mappers
                 Id = stockModel.Id,
                 Symbol = stockModel.Symbol,
                 CompanyName = stockModel.CompanyName,
-                Purchase = stockModel.LastDividend,
+                Purchase = stockModel.Purchase,
+                LastDividend=stockModel.LastDividend,
                 Industry = stockModel.Industry,
                 MarketCap = stockModel.MarketCap,
                 Comments=stockModel.Comments.Select(c=>c.ToCommentDto()).ToList()
             };
         }
-
+    
         public static Stock ToStockFromCreateDTO(this CreateStockRequestDto stockDto)
         {
             return new Stock{
@@ -33,5 +34,18 @@ namespace urban_trader_be.Mappers
                 MarketCap=stockDto.MarketCap
             };
         }
+
+        public static Stock ToStockFromExternalAPI(this ExternalAPIStock externalAPIStock)
+        {
+            return new Stock{
+                Symbol = externalAPIStock.symbol,
+                CompanyName = externalAPIStock.companyName,
+                Purchase = (decimal)externalAPIStock.price,
+                LastDividend=(decimal)externalAPIStock.lastDiv,
+                Industry = externalAPIStock.industry,
+                MarketCap = externalAPIStock.mktCap,
+            };
+        }
+
     }
 }

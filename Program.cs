@@ -83,6 +83,8 @@ builder.Services.AddScoped<iStockRepository, StockRepository >();
 builder.Services.AddScoped<iCommentRepository, CommentRepository >();
 builder.Services.AddScoped<iTokenService, TokenService>();
 builder.Services.AddScoped<iPortfolioRespository, PortfolioRepository>();
+builder.Services.AddScoped<iExternalApiService, ExternalApiService>();
+builder.Services.AddHttpClient<iExternalApiService, ExternalApiService>();
 
 var app = builder.Build();
 

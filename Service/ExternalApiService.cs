@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using urban_trader_be.DTO.Stock;
 using urban_trader_be.Interface;
+using urban_trader_be.Mappers;
 using urban_trader_be.Model;
 
 namespace urban_trader_be.Service
@@ -27,11 +29,20 @@ namespace urban_trader_be.Service
                 {
                     var content=await result.Content.ReadAsStringAsync();
                     var tasks=JsonConvert.DeserializeObject<ExternalAPIStock[]>(content);
+                    var stock=tasks[0];
+
+                    if(stock!=null)
+                    {
+                        return stock.ToStockFromExternalAPI();
+                    }
+                    return null;
                 }
+                return null;
             }
             catch(Exception e)
             {
-
+                Console.WriteLine(e);
+                return null;
             }
         }
     }

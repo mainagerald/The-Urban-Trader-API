@@ -10,6 +10,7 @@ using urban_trader_be.Interface;
 using urban_trader_be.Mappers;
 using urban_trader_be.Model;
 using urban_trader_be.Repository;
+using urban_trader_be.Service;
 
 namespace urban_trader_be.Controller
 {
@@ -17,15 +18,17 @@ namespace urban_trader_be.Controller
     [ApiController]
     public class CommentController:ControllerBase
     {
-        private readonly iCommentRepository _commentRepository;
-        private readonly iStockRepository _stockRepository;
+        private readonly iCommentRepository _icommentRepository;
+        private readonly iStockRepository _istockRepository;
         private readonly UserManager<AppUser> _userManager;
+        private readonly iExternalApiService _iexternalApiService;
 
-        public CommentController(iCommentRepository iCommentRepo, iStockRepository iStockRepo, UserManager<AppUser> userManager)
+        public CommentController(iCommentRepository iCommentRepo, iStockRepository iStockRepo, UserManager<AppUser> userManager, iExternalApiService iexternalApiService)
         {
-            _commentRepository=iCommentRepo;
-            _stockRepository=iStockRepo;
+            _icommentRepository=iCommentRepo;
+            _istockRepository=iStockRepo;
             _userManager=userManager;
+            _iexternalApiService=iexternalApiService;
         }
 
         [HttpGet]
@@ -33,7 +36,7 @@ namespace urban_trader_be.Controller
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            var comments = await _commentRepository.GetAllAsync();
+            var comments = await _icommentRepository.GetAllAsync();
             var CommentDto=comments.Select(s=>s.ToCommentDto());
             return Ok(CommentDto);
         }
@@ -44,7 +47,7 @@ namespace urban_trader_be.Controller
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            var comment=await _commentRepository.GetByIdAsync(id);
+            var comment=await _icommentRepository.GetByIdAsync(id);
             if(comment==null){
                 return NotFound();
             }
@@ -52,23 +55,34 @@ namespace urban_trader_be.Controller
             return Ok(comment.ToCommentDto());
         }
 
-        [HttpPost("{StockId:int}")]
-        public async Task<IActionResult> Create([FromRoute] int StockId, CreateCommentDto createCommentDto)
+        [HttpPost("{symbol:alpha}")]
+        public async Task<IActionResult> Create([FromRoute] string symbol, CreateCommentDto createCommentDto)
         {
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            if(!await _stockRepository.StockExists(StockId)){
-                return BadRequest("Stock does not exist!");
+            
+            var stock=await _istockRepository.GetBySymbolAsync(symbol);
+            if(stock==null)
+            {
+                stock=await _iexternalApiService.FindStockBySymbolAsync(symbol);
+                if(stock==null)
+                {
+                    return BadRequest("Stock does not exist!");
+                }
+                else
+                {
+                    await _istockRepository.CreateAsync(stock);
+                }
             }
 
             var username=User.GetUsername();
             var appUser=await _userManager.FindByNameAsync(username);
 
-            var commentModel=createCommentDto.ToCommentFromCreate(StockId);
+            var commentModel=createCommentDto.ToCommentFromCreate(stock.Id);
             commentModel.AppUserId=appUser.Id;
-            
-            await _commentRepository.CreateAsync(commentModel);
+
+            await _icommentRepository.CreateAsync(commentModel);
             
             return CreatedAtAction(nameof(GetById), new {id=commentModel.Id}, commentModel.ToCommentDto());
         }
@@ -79,7 +93,7 @@ namespace urban_trader_be.Controller
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            var commentModel=await _commentRepository.UpdateAsync(id, updateCommentDto);
+            var commentModel=await _icommentRepository.UpdateAsync(id, updateCommentDto);
             if(commentModel==null){
                 return NotFound("Comment does nt exist");
             }
@@ -92,7 +106,7 @@ namespace urban_trader_be.Controller
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            var commentModel=await _commentRepository.DeleteAsync(id);
+            var commentModel=await _icommentRepository.DeleteAsync(id);
             if(commentModel==null){
                 return NotFound("Comment does not exist");
             }

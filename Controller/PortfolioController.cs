@@ -21,12 +21,14 @@ namespace urban_trader_be.Controller
         private readonly UserManager<AppUser> _userManager;
         private readonly iStockRepository _istockRepo;
         private readonly iPortfolioRespository _iportfolioRepo;
-        public PortfolioController(UserManager<AppUser> userManager, iStockRepository istockRepo, iPortfolioRespository iportfolioRepo)
+        private readonly iExternalApiService _iexternalApiService;
+        public PortfolioController(UserManager<AppUser> userManager, iStockRepository istockRepo, iPortfolioRespository iportfolioRepo, iExternalApiService iexternalApiService)
         {
             
             _userManager=userManager;
             _istockRepo=istockRepo;
             _iportfolioRepo=iportfolioRepo;
+            _iexternalApiService=iexternalApiService;
         }
 
         [HttpGet]
@@ -50,7 +52,15 @@ namespace urban_trader_be.Controller
 
             if(stock==null)
             {
-                return BadRequest("Stock Not Found");
+                stock=await _iexternalApiService.FindStockBySymbolAsync(symbol);
+                if(stock==null)
+                {
+                    return BadRequest("Stock does not exist!");
+                }
+                else
+                {
+                    await _istockRepo.CreateAsync(stock);
+                }
             }
 
             var userPortfolio= await _iportfolioRepo.GetUserPortfolio(appUser);
