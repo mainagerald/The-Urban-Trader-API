@@ -12,7 +12,7 @@ using urban_trader_be.Service;
 
 namespace urban_trader_be.Controller
 {
-    [Route("urban_trader_be/account")]
+    [Route("api/v3/account")]
     [ApiController]
     public class AccountController:ControllerBase
     {

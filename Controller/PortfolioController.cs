@@ -14,7 +14,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace urban_trader_be.Controller
 {
-    [Route("urban_trader_be/portfolio")]
+    [Route("api/v3/portfolio")]
     [ApiController]
     public class PortfolioController:ControllerBase
     {

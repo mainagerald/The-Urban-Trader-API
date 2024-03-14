@@ -13,7 +13,7 @@ using urban_trader_be.Mappers;
 
 namespace urban_trader_be.Controller
 {
-    [Route("urban_trader_be/stock")]
+    [Route("api/v3/stock")]
     [ApiController]
     public class StockController : ControllerBase
     {

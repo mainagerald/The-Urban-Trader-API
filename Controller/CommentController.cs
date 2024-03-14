@@ -16,7 +16,7 @@ using urban_trader_be.Service;
 
 namespace urban_trader_be.Controller
 {
-    [Route("urban_trader_be/comment")]
+    [Route("api/v3/comment")]
     [ApiController]
     public class CommentController:ControllerBase
     {
