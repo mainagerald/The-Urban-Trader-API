@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using urban_trader_be.DTO.Comment;
 using urban_trader_be.Extensions;
+using urban_trader_be.Helpers;
 using urban_trader_be.Interface;
 using urban_trader_be.Mappers;
 using urban_trader_be.Model;
@@ -32,11 +34,12 @@ namespace urban_trader_be.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(){
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery]CommentQueryObject commentQueryObject){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            var comments = await _icommentRepository.GetAllAsync();
+            var comments = await _icommentRepository.GetAllAsync(commentQueryObject);
             var CommentDto=comments.Select(s=>s.ToCommentDto());
             return Ok(CommentDto);
         }
